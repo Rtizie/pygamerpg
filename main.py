@@ -1,11 +1,9 @@
 import pygame
 from pygame.locals import *
-import os
-from colors import *
 from map import Map
-from tileset import Tileset
-
-tileset = os.path.join("Assets", "tileset.png")
+from tile import Tile
+from tiles import *
+from colors import *
 
 class Game:
     W = 800
@@ -19,8 +17,12 @@ class Game:
         self.screen = pygame.display.set_mode(Game.SIZE)
         pygame.display.set_caption("Pygame RPG")
         self.running = True
-        Tileset(tileset)
-        Map()
+        self.tile = Tile((800,600),DIRT)
+        self.map = Map()
+
+    def update(self):
+        self.map.update()
+        pygame.display.flip()
 
     def run(self):
         while self.running:
@@ -29,8 +31,8 @@ class Game:
                 if event.type == QUIT:
                     self.running = False
 
-            self.screen.fill(WHITE)
-            pygame.display.flip()
+            self.update()
+            
         pygame.quit()
 
 
