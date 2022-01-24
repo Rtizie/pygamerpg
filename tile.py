@@ -13,4 +13,4 @@ class Tile(pygame.sprite.Sprite):
         self.vector = vector
 
     def update(self):
-        self.screen.blit(self.image,(self.vector[0] - self.rect[2],self.vector[1] - self.rect[3]))    
+        self.screen.blit(self.image,(self.vector[0] - self.rect[2],self.vector[1] - self.rect[3])) 
