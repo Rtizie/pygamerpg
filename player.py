@@ -9,6 +9,8 @@ class Player(pygame.sprite.Sprite):
     speed = 3
     jump_speed = -8
     on_ground = False
+    on_ceiling = False
+    facing_right = True
 
     def __init__(self,pos) -> None:
         pygame.sprite.Sprite.__init__(self)
@@ -41,26 +43,39 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.direction.y
         
     def get_input(self):
+        jumpKey = pygame.key.get_pressed()[32]
         keys = pygame.key.get_pressed()
+
+        if jumpKey and self.on_ground:
+            self.direction.y = self.jump_speed
 
         if keys[pygame.K_RIGHT]:
             self.direction.x = 1
+            self.facing_right = True
         elif keys[pygame.K_LEFT]:
             self.direction.x = -1
-        elif keys[pygame.K_SPACE] and self.on_ground:
-            self.direction.y = self.jump_speed
+            self.facing_right = False
         else:
             self.direction.x = 0
 
-
-    def update(self,speed):
-        self.get_input()
+    def animation(self,speed):
         # Animation
         self.current_sprite += speed
         if int(self.current_sprite) >= len(self.sprites):
             self.current_sprite = 0
 
-        self.image = self.sprites[int(self.current_sprite)]
+
+        image = self.sprites[int(self.current_sprite)]
+        if self.facing_right:
+            self.image = image
+        else:
+            flipped_image = pygame.transform.flip(image,True,False)
+            self.image = flipped_image
+
+    def update(self,speed):
+        self.get_input()
+        self.animation(speed)
+
 
 
     
