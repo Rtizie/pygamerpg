@@ -12,7 +12,7 @@ class Map:
     def draw_ground(self):
         for horizontalTiles in range(int(self.tilesMap[1])):
             self.tiles.add(Tile((horizontalTiles * 24,600), DIRT))
-            self.tiles.add(Tile((horizontalTiles * 24,600-24), GRASS_TOP))
+            self.tiles.add(Tile((horizontalTiles * 24,600 - 24), GRASS_TOP))
     
     def draw_background(self):
         self.screen.blit(BACKGROUND,(0,0))
@@ -40,7 +40,7 @@ class Map:
                     self.current_x = player.rect.right
 
     def vertical_collision_check(self):
-        player = self.player.sprite
+        player = self.player
         player.gravity()
 
         for sprite in self.tiles.sprites():
@@ -48,12 +48,13 @@ class Map:
                 if player.direction.y > 0: 
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
+                    player.on_ground = True
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
     def update(self):
-        #self.vertical_collision_check()
+        self.vertical_collision_check()
         self.horizontal_collision_check()
         self.draw_background()
         for tile in self.tiles:

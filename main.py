@@ -21,8 +21,8 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode(Game.SIZE)
         pygame.display.set_caption("Pygame RPG")
-        
-        self.player = Player((0,0))
+
+        self.player = Player((100,100))
         self.map = Map(self.player)
         self.moving_sprites.add(self.player)
 

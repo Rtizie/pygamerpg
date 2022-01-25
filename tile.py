@@ -1,3 +1,4 @@
+from cmath import rect
 import pygame
 
 
@@ -8,9 +9,11 @@ class Tile(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = image
         self.rect = image.get_rect()
+        self.rect.x = vector[0] - 24
+        self.rect.y = vector[1] - 24
         self.screen = pygame.display.get_surface()
         self.area = self.screen.get_rect()
-        self.vector = vector
+
 
     def update(self):
-        self.screen.blit(self.image,(self.vector[0] - self.rect[2],self.vector[1] - self.rect[3])) 
+        self.screen.blit(self.image,self.rect) 
