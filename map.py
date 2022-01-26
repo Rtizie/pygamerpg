@@ -45,6 +45,21 @@ class Map:
     def draw_background(self):
         self.screen.blit(BACKGROUND,(0,0))
 
+    def scroll_x(self):
+        player = self.player
+        player_x = player.rect.centerx
+        direction_x = player.direction.x
+
+        if player_x < self.screen.get_width() / 4 and direction_x < 0:
+            self.world_shift = 3
+            player.speed = 0
+        elif player_x > self.screen.get_width() - (self.screen.get_width() / 4) and direction_x > 0:
+            self.world_shift = -3
+            player.speed = 0
+        else:
+            self.world_shift = 0
+            player.speed = 3
+
 
     def __init__(self,player):
         self.player = player
@@ -88,10 +103,11 @@ class Map:
             player.on_ceiling = False
             
     def update(self):
+        self.scroll_x()
         self.vertical_collision_check()
         self.horizontal_collision_check()
         self.draw_background()
         for tile in self.tiles:
-            tile.update()
+            tile.update(self.world_shift)
         
         

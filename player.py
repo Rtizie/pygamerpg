@@ -8,6 +8,7 @@ class Player(pygame.sprite.Sprite):
 
     gravity_float = 0.6
     speed = 3
+    anim_speed = 0.15
     jump_speed = -10.5
     on_ground = False
     on_ceiling = False
@@ -37,6 +38,7 @@ class Player(pygame.sprite.Sprite):
             full_path = character_path + animation
             self.animations[animation] = import_folder(full_path)
 
+
     def gravity(self):
         self.direction.y += self.gravity_float
         self.rect.y += self.direction.y
@@ -61,7 +63,7 @@ class Player(pygame.sprite.Sprite):
         animation = self.animations[self.status]
 
         # loop over frame index 
-        self.frame_index += speed
+        self.frame_index += self.anim_speed
         if self.frame_index >= len(animation):
             self.frame_index = 0
 
