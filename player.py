@@ -1,5 +1,6 @@
 import os
 import pygame
+from support import import_folder
 
 
 class Player(pygame.sprite.Sprite):
@@ -7,36 +8,34 @@ class Player(pygame.sprite.Sprite):
 
     gravity_float = 0.6
     speed = 3
-    jump_speed = -8
+    jump_speed = -10.5
     on_ground = False
     on_ceiling = False
+    on_left = False
+    on_right = False
     facing_right = True
 
     def __init__(self,pos) -> None:
         pygame.sprite.Sprite.__init__(self)
-        self.frame = 0 # count frames
         self.pos = pos     
         self.screen = pygame.display.get_surface()
         self.direction = pygame.math.Vector2(0,0)
+        self.import_character_assets()
+        self.frame_index = 0
+        self.image = self.animations['idle'][self.frame_index]
+        self.rect = self.image.get_rect(topleft = pos)
 
-        self.sprites = []
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_1.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_2.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_3.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_4.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_5.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_6.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_7.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_8.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_9.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_10.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_11.gif')))
-        self.sprites.append(pygame.image.load(os.path.join("Assets/Character",'idle_12.gif')))
-        self.current_sprite = 0
-        self.image = self.sprites[self.current_sprite]
-
+        self.status = 'idle'
         self.rect = self.image.get_rect()
         self.rect.topleft = [pos[0],pos[1]]
+
+    def import_character_assets(self):
+        character_path = 'Assets/Character/'
+        self.animations = {'idle':[],'run':[],'jump':[],'fall':[]}
+
+        for animation in self.animations.keys():
+            full_path = character_path + animation
+            self.animations[animation] = import_folder(full_path)
 
     def gravity(self):
         self.direction.y += self.gravity_float
@@ -59,21 +58,49 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
 
     def animation(self,speed):
-        # Animation
-        self.current_sprite += speed
-        if int(self.current_sprite) >= len(self.sprites):
-            self.current_sprite = 0
+        animation = self.animations[self.status]
 
+        # loop over frame index 
+        self.frame_index += speed
+        if self.frame_index >= len(animation):
+            self.frame_index = 0
 
-        image = self.sprites[int(self.current_sprite)]
+        image = animation[int(self.frame_index)]
         if self.facing_right:
             self.image = image
         else:
             flipped_image = pygame.transform.flip(image,True,False)
             self.image = flipped_image
 
+        # set the rect
+        if self.on_ground and self.on_right:
+            self.rect = self.image.get_rect(bottomright = self.rect.bottomright)
+        elif self.on_ground and self.on_left:
+            self.rect = self.image.get_rect(bottomleft = self.rect.bottomleft)
+        elif self.on_ground:
+            self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
+        elif self.on_ceiling and self.on_right:
+            self.rect = self.image.get_rect(topright = self.rect.topright)
+        elif self.on_ceiling and self.on_left:
+            self.rect = self.image.get_rect(topleft = self.rect.topleft)
+        elif self.on_ceiling:
+            self.rect = self.image.get_rect(midtop = self.rect.midtop)
+
+    def get_status(self):
+        if self.direction.y < 0:
+            self.status = 'jump'
+        elif self.direction.y > 1:
+            self.status = 'fall'
+        else:
+            if self.direction.x != 0:
+                self.status = 'run'
+            else:
+                self.status = 'idle'
+
+
     def update(self,speed):
         self.get_input()
+        self.get_status()
         self.animation(speed)
 
 
