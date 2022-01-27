@@ -18,13 +18,13 @@ class Map:
             for row_index, row in enumerate(reader):
                 for col_index, val in enumerate(row):
                     if val != '-1':
-                        x = col_index * 24
-                        y = row_index * 24
+                        x = col_index * 32
+                        y = row_index * 32
                         match val:
-                            case '0':
+                            case '13':
                                 self.tiles.add(Tile((x,y), DIRT))
                             case '1':
-                                self.tiles.add(Tile((x,y), GRASS_BOTTOM))
+                                self.tiles.add(Tile((x,y), GRASS_TOP))
                             case '2':
                                 self.tiles.add(Tile((x,y), GRASS_LEFT))
                             case '3':
@@ -80,7 +80,7 @@ class Map:
         self.player = player
         self.screen = pygame.display.get_surface()
         self.map_size = self.screen.get_size()
-        self.tilesMap = (self.map_size[0] / 12,self.map_size[1] / 12)
+        self.tilesMap = (self.map_size[0] / 16,self.map_size[1] / 16)
         self.draw_background()
         self.draw_ground()
     
