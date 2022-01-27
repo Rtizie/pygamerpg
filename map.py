@@ -60,6 +60,21 @@ class Map:
             self.world_shift = 0
             player.speed = 3
 
+    def scroll_y(self):
+        player = self.player
+        player_y = player.rect.centery
+        direction_y = player.direction.y
+
+        if player_y < self.screen.get_height() / 7 and direction_y < 0:
+            self.world_shift_y = 5
+            player.speed = 0
+        elif player_y > self.screen.get_height() - (self.screen.get_height() / 7) and direction_y > 0:
+            self.world_shift_y = -5
+            player.speed = 0
+        else:
+            self.world_shift_y = 0
+            player.speed = 3
+
 
     def __init__(self,player):
         self.player = player
@@ -104,10 +119,11 @@ class Map:
             
     def update(self):
         self.scroll_x()
+        self.scroll_y()
         self.vertical_collision_check()
         self.horizontal_collision_check()
         self.draw_background()
         for tile in self.tiles:
-            tile.update(self.world_shift)
+            tile.update(self.world_shift,self.world_shift_y)
         
         

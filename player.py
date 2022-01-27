@@ -6,7 +6,7 @@ from support import import_folder
 class Player(pygame.sprite.Sprite):
     screen = None
 
-    gravity_float = 0.6
+    gravity_float = 0.4
     speed = 3
     anim_speed = 0.15
     jump_speed = -10.5

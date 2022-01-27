@@ -15,6 +15,7 @@ class Tile(pygame.sprite.Sprite):
         self.area = self.screen.get_rect()
 
 
-    def update(self,x_shift):
+    def update(self,x_shift,y_shift):
         self.rect.x += x_shift
+        self.rect.y += y_shift
         self.screen.blit(self.image,self.rect) 
