@@ -4,7 +4,7 @@ import os
 import pygame
 
 from tile import Tile
-from images import BACKGROUND, DIRT, GRASS_BOTTOM, GRASS_LEFT, GRASS_LEFT_CORNER, GRASS_LEFT_CORNER_BOTTOM, GRASS_RIGHT, GRASS_RIGHT_CORNER, GRASS_RIGHT_CORNER_BOTTOM, GRASS_TOP
+from images import *
 import csv
 
 class Map:
@@ -23,22 +23,6 @@ class Map:
                         match val:
                             case '13':
                                 self.tiles.add(Tile((x,y), DIRT))
-                            case '1':
-                                self.tiles.add(Tile((x,y), GRASS_TOP))
-                            case '2':
-                                self.tiles.add(Tile((x,y), GRASS_LEFT))
-                            case '3':
-                                self.tiles.add(Tile((x,y), GRASS_LEFT_CORNER))
-                            case '4':
-                                self.tiles.add(Tile((x,y), GRASS_LEFT_CORNER_BOTTOM))
-                            case '5':
-                                self.tiles.add(Tile((x,y), GRASS_RIGHT))
-                            case '6':
-                                self.tiles.add(Tile((x,y), GRASS_RIGHT_CORNER))
-                            case '7':
-                                self.tiles.add(Tile((x,y), GRASS_RIGHT_CORNER_BOTTOM))
-                            case '8':
-                                self.tiles.add(Tile((x,y), GRASS_TOP))
                             case _:
                                 self.tiles.add(Tile((x,y),DIRT))
     
@@ -50,11 +34,11 @@ class Map:
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-        if player_x < self.screen.get_width() / 4 and direction_x < 0:
-            self.world_shift = 3
+        if player_x < self.screen.get_width() / 2 and direction_x < 0:
+            self.world_shift = 4
             player.speed = 0
-        elif player_x > self.screen.get_width() - (self.screen.get_width() / 4) and direction_x > 0:
-            self.world_shift = -3
+        elif player_x > self.screen.get_width() - (self.screen.get_width() / 2) and direction_x > 0:
+            self.world_shift = -4
             player.speed = 0
         else:
             self.world_shift = 0
@@ -87,7 +71,7 @@ class Map:
     def horizontal_collision_check(self):
         player = self.player
         player.rect.x += player.direction.x * player.speed
-
+        print(player.speed)
         for sprite in self.tiles.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0: 
