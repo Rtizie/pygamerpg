@@ -1,7 +1,4 @@
-from cmath import rect
 import pygame
-
-
 class Tile(pygame.sprite.Sprite):
 
 

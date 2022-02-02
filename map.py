@@ -57,7 +57,6 @@ class Map:
             player.speed = 0
         else:
             self.world_shift_y = 0
-            player.speed = 3
 
 
     def __init__(self,player):
