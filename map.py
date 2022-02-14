@@ -1,5 +1,3 @@
-from email.policy import default
-import enum
 import os
 import pygame
 
@@ -21,8 +19,12 @@ class Map:
                         x = col_index * 32
                         y = row_index * 32
                         match val:
-                            case '13':
+                            case '0':
                                 self.tiles.add(Tile((x,y), DIRT))
+                            case '17':
+                                self.tiles.add(Tile((x,y), GRASS_TOP))
+                            case '20':
+                                self.tiles.add(Tile((x,y), GRASS_TOP_LEFT))
                             case _:
                                 self.tiles.add(Tile((x,y),DIRT))
     
@@ -34,10 +36,10 @@ class Map:
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-        if player_x < self.screen.get_width() / 2 and direction_x < 0:
+        if player_x < self.screen.get_width() / 4 and direction_x < 0:
             self.world_shift = 4
             player.speed = 0
-        elif player_x > self.screen.get_width() - (self.screen.get_width() / 2) and direction_x > 0:
+        elif player_x > self.screen.get_width() - (self.screen.get_width() / 4) and direction_x > 0:
             self.world_shift = -4
             player.speed = 0
         else:
@@ -49,12 +51,12 @@ class Map:
         player_y = player.rect.centery
         direction_y = player.direction.y
 
-        if player_y < self.screen.get_height() / 7 and direction_y < 0:
+        if player_y < self.screen.get_height() / 8 and direction_y < 0:
             self.world_shift_y = 5
-            player.speed = 0
-        elif player_y > self.screen.get_height() - (self.screen.get_height() / 7) and direction_y > 0:
+            player.direction.y = 0
+        elif player_y > self.screen.get_height() - (self.screen.get_height() / 8) and direction_y > 0:
             self.world_shift_y = -5
-            player.speed = 0
+            player.direction.y
         else:
             self.world_shift_y = 0
 
